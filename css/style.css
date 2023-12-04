@@ -12512,6 +12512,19 @@ input[type="button"].btn-block {
   white-space: nowrap;
 }
 
+.navbar-logo {
+  margin-left: -5px;
+  margin-top: 10px;
+  color: #FFF;
+  font-size: 32px !important;
+  letter-spacing: 4px !important;
+}
+
+.navbar-small-logo {
+  font-size: 14px !important;
+  letter-spacing: 2.5px;
+}
+
 .navbar-brand:hover, .navbar-brand:focus {
   text-decoration: none;
 }
@@ -18442,7 +18455,7 @@ h6, .h6 {
 }
 
 .navbar .navbar-brand img {
-  width: 200px;
+  width: 50px;
 }
 
 @media (max-width: 991px) {
@@ -18915,6 +18928,12 @@ section {
 .owl-carousel .owl-item .item {
   border-radius: 19.5px;
   overflow: hidden;
+  text-align: justify;
+}
+
+.owl-item .item p, .item h5 {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .owl-carousel .owl-item .item img {
