@@ -18371,8 +18371,9 @@ h6, .h6 {
 .footer {
   color: #e5e5e5;
   background: #3c37f1 url(../images/footer_bg.svg);
-  background-size: cover;
+  background-size:cover;
   background-position: left bottom;
+
 }
 
 .footer p {
@@ -18667,7 +18668,7 @@ html {
 }
 
 section {
-  padding: 120px 0 0 0;
+  padding: 0 0 0 0;
 }
 
 @media (max-width: 1024px) {
