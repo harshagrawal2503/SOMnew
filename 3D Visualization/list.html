@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Display PDB Structure</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
+      #viewport {
+        width: 100%;
+        height: 100vh;
+      }
+      .dropdown {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        border: none;
+        padding: 8px;
+        font-size: 15px;
+        background: linear-gradient(
+          141deg,
+          #0fb8ad 0%,
+          #1fc8db 51%,
+          #2cb5e8 75%
+        );
+        color: white;
+        font-family: cursive;
+        box-sizing: border-box;
+        z-index: 1;
+        border-radius: 10px;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        min-width: 125px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        margin-top: 5px;
+        left: 1px;
+      }
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .dropdown-content a {
+        color: black;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: block;
+      }
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewport"></div>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown">
+      <span>Choose PDB File</span>
+      <div class="dropdown-content" id="pdbDropdown">
+        <!-- PDB file options will be populated here -->
+      </div>
+    </div>
+
+    <!-- Include NGL library -->
+    <script src="https://cdn.rawgit.com/arose/ngl/v2.0.0-dev.32/dist/ngl.js"></script>
+
+    <script>
+      // PDB file names
+      var pdbFiles = ["1e7y.pdb", "2gtl.pdb", "2zm6.pdb", "barite_BaSO4.pdb"]; // Add your PDB file names here
+
+      // Populate the dropdown menu with PDB file options
+      var dropdownContent = document.getElementById("pdbDropdown");
+      pdbFiles.forEach(function (file) {
+        var link = document.createElement("a");
+        link.href = "#";
+        link.textContent = file;
+        link.onclick = function () {
+          loadPDB(file);
+        };
+        dropdownContent.appendChild(link);
+      });
+
+      // Create NGL Stage object
+      var stage = new NGL.Stage("viewport");
+
+      // Function to load and display the selected PDB structure
+      function loadPDB(fileName) {
+        stage.removeAllComponents(); // Remove existing components
+        stage.loadFile(fileName).then(function (o) {
+          o.addRepresentation("cartoon", { color: "atomindex" });
+          o.autoView();
+        });
+      }
+
+      // Handle window resizing
+      window.addEventListener(
+        "resize",
+        function (event) {
+          stage.handleResize();
+        },
+        false
+      );
+    </script>
+  </body>
+</html>

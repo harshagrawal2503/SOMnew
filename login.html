@@ -10,20 +10,17 @@
     <link rel="stylesheet" href="login.css" />
     <title>Login page</title>
   </head>
-  <body>  
+  <body>
+    <div id="fullscreenOverlay"></div>
+      <iframe id="animationFrame" src="transition-animation.html"></iframe>
     <nav class="navbar">
-      <div class="logo">
+      <div>
         <a href="index.html" class="navbar-brand">
-          <img src="SOM.png" alt="Som Biotech">
+          <img class="logo" src="SOMnew.png" alt="Som Biotech">
         </a>
       </div>
       <div class="navbar-links">
         <a href="index.html">Home</a>
-        <a href="#about">About Us</a>
-        <a href="login.html">Login</a>
-        <a href="login.html">Sign Up</a>
-        <a href="#contact">Contact</a>
-        <a href="#help">Need Help</a>
       </div>
     </nav>
     <div class="container">
@@ -114,7 +111,26 @@
         </div>
       </div>
     </div>
-
     <script src="app.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+        const iframe = document.getElementById("animationFrame");
+        const fullscreenOverlay =
+          document.getElementById("fullscreenOverlay");
+
+        iframe.style.display = "none";
+
+        if (iframe.contentDocument) {
+          const iframeContent =
+            iframe.contentDocument.documentElement.innerHTML;
+
+          fullscreenOverlay.innerHTML = iframeContent;
+
+          setTimeout(function () {
+            fullscreenOverlay.style.display = "none";
+          }, 2000);
+        }
+      });
+    </script>
   </body>
 </html>
