@@ -68,6 +68,7 @@ a {
 .heading {
  padding-top: 50px;
  padding-bottom: 20px;
+ text-align: center;
 }
 
 h1 {
@@ -261,10 +262,18 @@ width: 145px;
   background-color: #007bff; 
   color: #fff ;
   border: 1px solid #007bff; 
+  
     }
+
 #myCarousel .btn.btn-primary:hover {
       background-color: #2ee738; 
       color:#fff;}
+
+.car-btn{
+ padding-left: 300px;
+ display: inline;
+ justify-content: space-evenly;
+}
 
 #myCarousel .btn.btn-readmore {
   background-color: blue; 
