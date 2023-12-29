@@ -57,19 +57,23 @@
         color: #ff9999;
       }
 
-      .graph-container {
-        width: 100%;
-        margin: 0 auto;
-        display: flex;
-        gap: 20px;
-      }
-
       .top-section {
         margin-top: 50px !important;
       }
 
       .main-section {
         margin-bottom: 100px;
+      }
+
+      .list-unstyled li a .active {
+        color: blue !important;
+      }
+
+      .graph-container {
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        gap: 20px;
       }
 
       /* Style the description and paragraphs */
@@ -99,6 +103,18 @@
         padding: 20px;
       }
 
+      .logo {
+        width: 150px;
+      }
+
+      .card.card-body.vh-10.text-black.bg-white {
+        width: fit-content;
+      }
+
+      .dropdown-container {
+        margin: 10px;
+      }
+
       #fullscreenOverlay {
         position: fixed;
         top: 0;
@@ -115,18 +131,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-
-      .logo {
-        width: 150px;
-      }
-
-      .card.card-body.vh-10.text-black.bg-white {
-        width: fit-content;
-      }
-
-      .dropdown-container {
-        margin: 10px;
       }
 
       .box {
@@ -156,6 +160,20 @@
         background: #9c98a0;
         border-radius: 10px;
       }
+      .box i {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translate(-50%, -50%);
+        font-size: 26px;
+        color: #3c37f1;
+        transition: 0.2s;
+        font-size: 14px;
+      }
+      .box:hover i {
+        opacity: 0;
+        z-index: -1;
+      }
 
       .read-more-button{
   user-select:none;
@@ -171,22 +189,8 @@
   font-family:cursive;
   box-sizing:border-box;
 }
-      .box i {
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        transform: translate(-50%, -50%);
-        font-size: 26px;
-        color: #3c37f1;
-        transition: 0.2s;
-        font-size: 14px;
-      }
-      .box:hover i {
-        opacity: 0;
-        z-index: -1;
-      }
-      
-      .graph-prediction {
+
+.graph-prediction {
         margin-top: 20px;
       }
 
