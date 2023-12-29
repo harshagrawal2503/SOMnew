@@ -11,6 +11,10 @@ input {
   font-family: "Poppins", sans-serif;
 }
 
+.logo {
+  width: 150px;
+}
+
 .container {
   position: relative;
   width: 100%;
@@ -405,14 +409,12 @@ form.sign-in-form {
 
 
 .navbar {
-  position: fixed;
-  top: 0;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.3rem;
-  background-color: #333; 
+  background: #348fef;
   color: #fff; 
   z-index: 1000; 
 }
@@ -429,7 +431,6 @@ form.sign-in-form {
 }
 
 .container {
-  margin-top: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -439,5 +440,20 @@ img {
   margin-right: 15px;
 }
 
-
-
+#fullscreenOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.9
+  ); /* Semi-transparent white background */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
