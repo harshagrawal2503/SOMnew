@@ -1,463 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bar Graph</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/graph/dashboard.css" />
-    <link
-      rel="stylesheet"
-      href="/vendors/mdi/css/materialdesignicons.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.7.0.js"
-      integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-      crossorigin="anonymous"
-    ></script>
-    <style>
-      body {
-        font-family: "Montserrat", sans-serif;
-        text-align: justify;
-        overflow-y: auto !important;
-      }
 
-      .dropdown-container {
-        position: relative;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bar Graph</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/graph/dashboard.css" />
+  <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      text-align: justify;
+      overflow-y: auto !important;
+    }
 
-      .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        z-index: 1000;
-      }
+    .dropdown-container {
+      position: relative;
+    }
 
-      .dropdown-menu .dropdown-item:hover {
-        border: 1px solid #80bdff;
-        border-radius: 5px;
-      }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+    }
 
-      .dropdown-menu .dropdown-item.active a {
-        color: #ff9999;
-      }
+    .dropdown-menu .dropdown-item:hover {
+      border: 1px solid #80bdff;
+      border-radius: 5px;
+    }
 
-      .top-section {
-        margin-top: 50px !important;
-      }
+    .dropdown-menu .dropdown-item.active a {
+      color: #ff9999;
+    }
 
-      .main-section {
-        margin-bottom: 100px;
-      }
+    .top-section {
+      margin-top: 50px !important;
+    }
 
-      .list-unstyled li a .active {
-        color: blue !important;
-      }
+    .main-section {
+      margin-bottom: 100px;
+    }
 
-      .graph-container {
-        width: 100%;
-        margin: 0 auto;
-        display: flex;
-        gap: 20px;
-      }
+    .list-unstyled li a .active {
+      color: blue !important;
+    }
 
-      /* Style the description and paragraphs */
-      .description h5 {
-        font-weight: 600;
-        margin-top: 20px;
-        position: relative;
-      }
+    .graph-container {
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      gap: 20px;
+    }
 
-      /* Style the span with red color */
-      span.red {
-        color: red;
-        font-weight: bold;
-      }
+    /* Style the description and paragraphs */
+    .description h5 {
+      font-weight: 600;
+      margin-top: 20px;
+      position: relative;
+    }
 
-      /* Style the span with green color */
-      span.green {
-        color: green;
-        font-weight: bold;
-      }
+    /* Style the span with red color */
+    span.red {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Style the span with green color */
+    span.green {
+      color: green;
+      font-weight: bold;
+    }
+
+    #myChart {
+      width: 600px !important;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      /* Adding box shadow */
+      border-radius: 8px;
+      /* Adding border radius */
+      background-color: #fff;
+      /* Setting background color */
+      margin: 20px auto;
+      /* Adjusting margin */
+      padding: 20px;
+    }
+
+    .logo {
+      width: 150px;
+    }
+
+    .card.card-body.vh-10.text-black.bg-white {
+      width: fit-content;
+    }
+
+    .dropdown-container {
+      margin: 10px;
+    }
+
+    #fullscreenOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255,
+          255,
+          255,
+          0.9);
+      /* Semi-transparent white background */
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .box {
+      position: relative;
+    }
+
+    .input {
+      padding: 10px;
+      width: 100%;
+      position: relative;
+      right: 0 !important;
+      top: 0;
+      height: 30px;
+      background: none;
+      border: 2px solid rgb(84, 84, 99);
+      border-radius: 50px;
+      box-sizing: border-box;
+      font-family: Comic Sans MS;
+      font-size: 26px;
+      color: rgb(56, 56, 167);
+      outline: none;
+      transition: 0.5s;
+      font-size: 20px;
+    }
+
+    .box:hover input {
+      width: 350px;
+      background: #9c98a0;
+      border-radius: 10px;
+    }
+
+    .box i {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translate(-50%, -50%);
+      font-size: 26px;
+      color: #3c37f1;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .box:hover i {
+      opacity: 0;
+      z-index: -1;
+    }
+
+    .read-more-button {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      cursor: pointer;
+      border: none;
+      padding: 8px;
+      font-size: 15px;
+      background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+      color: white;
+      font-family: cursive;
+      box-sizing: border-box;
+    }
+
+    .graph-prediction {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 1400px) {
       #myChart {
-        width: 600px !important;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; /* Adding box shadow */
-        border-radius: 8px; /* Adding border radius */
-        background-color: #fff; /* Setting background color */
-        margin: 20px auto; /* Adjusting margin */
-        padding: 20px;
+        width: 500px !important;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      #myChart {
+        width: 400px !important;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .graph {
+        width: 600px;
+        height: 300px;
+        margin: 0 auto;
+        margin-bottom: 40px;
       }
 
-      .logo {
-        width: 150px;
+      #myChart {
+        width: 100% !important;
       }
+    }
 
-      .card.card-body.vh-10.text-black.bg-white {
-        width: fit-content;
+    @media (max-width: 500px) {
+      .graph {
+        margin-bottom: 0;
       }
+    }
 
-      .dropdown-container {
-        margin: 10px;
+    @media (max-width: 450px) {
+      .graph {
+        margin-bottom: -40px;
       }
+    }
+  </style>
+</head>
 
-      #fullscreenOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(
-          255,
-          255,
-          255,
-          0.9
-        ); /* Semi-transparent white background */
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .box {
-        position: relative;
-      }
-
-      .input {
-        padding: 10px;
-        width: 100%;
-        position: relative;
-        right: 0 !important;
-        top: 0;
-        height: 30px;
-        background: none;
-        border: 2px solid rgb(84, 84, 99);
-        border-radius: 50px;
-        box-sizing: border-box;
-        font-family: Comic Sans MS;
-        font-size: 26px;
-        color: rgb(56, 56, 167);
-        outline: none;
-        transition: 0.5s;
-        font-size: 20px;
-      }
-      .box:hover input {
-        width: 350px;
-        background: #9c98a0;
-        border-radius: 10px;
-      }
-      .box i {
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        transform: translate(-50%, -50%);
-        font-size: 26px;
-        color: #3c37f1;
-        transition: 0.2s;
-        font-size: 14px;
-      }
-      .box:hover i {
-        opacity: 0;
-        z-index: -1;
-      }
-
-      .read-more-button{
-  user-select:none;
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  cursor:pointer;
-  border:none;
-  padding:8px;
-  font-size: 15px;
-  background:linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-  color:white;
-  font-family:cursive;
-  box-sizing:border-box;
-}
-
-.graph-prediction {
-        margin-top: 20px;
-      }
-
-      @media (max-width: 1400px) {
-        #myChart {
-          width: 500px !important;
-        }
-      }
-
-      @media (max-width: 1200px) {
-        #myChart {
-          width: 400px !important;
-        }
-      }
-
-      @media (max-width: 992px) {
-        .graph {
-          width: 600px;
-          height: 300px;
-          margin: 0 auto;
-          margin-bottom: 40px;
-        }
-        #myChart {
-          width: 100% !important;
-        }
-      }
-
-      @media (max-width: 500px) {
-        .graph {
-          margin-bottom: 0;
-        }
-      }
-      @media (max-width: 450px) {
-        .graph {
-          margin-bottom: -40px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="fullscreenOverlay"></div>
-      <iframe id="animationFrame" src="transition-animation.html"></iframe>
-    <div>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-          <a class="navbar-brand" href="../index.html"
-            ><img class="logo" src="SOMnew.png" alt="Som Biotech"
-          /></a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          ></button>
-          <div class="justify-content-end" id="navbarNav">
-            <form class="d-flex">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Search Genbank"
-                aria-label="Search"
-                name="gene"
-              />
-              <button class="btn btn-light" type="submit">
-                <i class="fa fa-search"></i>
-              </button>
-            </form>
-          </div>
-        </div>
-      </nav>
-      <hr />
-      <div
-        class="alert alert-danger alert-dismissible top-section"
-        style="margin: auto; max-width: 700px; background-color: #f8d7da"
-      >
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
-        <i class="fa fa-exclamation-triangle"></i><strong>Error!</strong>
-      </div>
-      <div class="dropdown-container">
-        <button
-          class="btn"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapseExample"
-          aria-expanded="false"
-          aria-controls="collapseExample"
-          style="border-color: #3c37f1; border-width: 2px"
-          id="dropdownToggleBtn"
-        >
-          <i class="fa fa-bars" aria-hidden="true" style="color: #3c37f1"></i>
-        </button>
-        <div class="collapse" id="collapseExample">
-          <div class="dropdown-menu card card-body vh-10 text-black bg-white">
-            <ul class="list-unstyled">
-              <li class="dropdown-item">
-                <a href="/graph/TPSA.html"
-                  ><i class="fa fa-line-chart"></i> TPSA</a
-                >
-              </li>
-              <li class="dropdown-item">
-                <a href="/graph/HydrogenBonds.html"
-                  ><i class="fa fa-tint"></i> Hydrogen Bonds</a
-                >
-              </li>
-              <li class="dropdown-item">
-                <a href="/graph/QSAR.html"
-                  ><i class="fa fa-line-chart"></i> QSAR</a
-                >
-              </li>
-              <li class="dropdown-item">
-                <a href="/graph/IOT.html"><i class="fa fa-wifi"></i> IOT</a>
-              </li>
-              <li class="dropdown-item">
-                <a href="/graph/Splicing.html"
-                  ><i class="fa fa-flask"></i> Splicing</a
-                >
-              </li>
-              <li class="dropdown dropdown-item">
-                <a
-                  class="dropdown-toggle"
-                  href="#"
-                  role="button"
-                  id="dropdownMenuLink"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="fa fa-legal"></i> Legal
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li class="dropdown-item">
-                    <a class="dropdown-item" href=""
-                      ><i class="fa fa-search"></i> Search Brand</a
-                    >
-                  </li>
-                  <li class="dropdown-item">
-                    <a class="dropdown-item" href=""
-                      ><i class="fa fa-search"></i> Search Device</a
-                    >
-                  </li>
-                  <li class="dropdown-item">
-                    <a class="dropdown-item" href=""
-                      ><i class="fa fa-search"></i> Search Event</a
-                    >
-                  </li>
-                </ul>
-              </li>
-              <li class="dropdown-item">
-                <a href=""><i class="fa fa-sign-out"></i> Logout</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="container main-section">
-        <div class="row">
-          <div class="col-lg-6 col-md-12">
-            <div class="graph-container">
-              <div class="graph">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-12">
-            <div class="box">
-              <form name="search">
-                <input
-                  placeholder="Search for Molecules..."
-                  type="text"
-                  class="input"
-                  name="txt"
-                  onmouseout="this.value = ''; this.blur();"
-                />
-              </form>
+<body>
+  <div id="fullscreenOverlay"></div>
+  <iframe id="animationFrame" src="transition-animation.html"></iframe>
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html"><img class="logo" src="SOMnew.png" alt="Som Biotech" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"></button>
+        <div class="justify-content-end" id="navbarNav">
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search Genbank" aria-label="Search"
+              name="gene" />
+            <button class="btn btn-light" type="submit">
               <i class="fa fa-search"></i>
-            </div>
-            <div class="description">
-              <h5>Description</h5>
-              <p id="shortDescription"></p>
-  <p id="fullDescription" style="display: none;"></p>
-  <button class="read-more-button" id="readMoreBtn" onclick="toggleDescription()">Read More</button>
-  <button class="read-more-button" id="readLessBtn" style="display: none;" onclick="toggleDescription()">Read Less</button>
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <hr />
+    <div class="alert alert-danger alert-dismissible top-section"
+      style="margin: auto; max-width: 700px; background-color: #f8d7da">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <i class="fa fa-exclamation-triangle"></i><strong>Error!</strong>
+    </div>
+    <div class="dropdown-container">
+      <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+        aria-expanded="false" aria-controls="collapseExample" style="border-color: #3c37f1; border-width: 2px"
+        id="dropdownToggleBtn">
+        <i class="fa fa-bars" aria-hidden="true" style="color: #3c37f1"></i>
+      </button>
+      <div class="collapse" id="collapseExample">
+        <div class="dropdown-menu card card-body vh-10 text-black bg-white">
+          <ul class="list-unstyled">
+            <li class="dropdown-item">
+              <a href="/3D Visualization/list.html"><i class="fa fa-cogs"></i> 3D Visualization</a>
+          </li>
+            <li class="dropdown-item">
+              <a href="/graph/TPSA.html"><i class="fa fa-line-chart"></i> TPSA</a>
+            </li>
+            <li class="dropdown-item">
+              <a href="/graph/HydrogenBonds.html"><i class="fa fa-tint"></i> Hydrogen Bonds</a>
+            </li>
+            <li class="dropdown-item">
+              <a href="/graph/QSAR.html"><i class="fa fa-line-chart"></i> QSAR</a>
+            </li>
+            <li class="dropdown-item">
+              <a href="/graph/IOT.html"><i class="fa fa-wifi"></i> IOT</a>
+            </li>
+            <li class="dropdown-item">
+              <a href="/graph/Splicing.html"><i class="fa fa-flask"></i> Splicing</a>
+            </li>
+            <li class="dropdown dropdown-item">
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa fa-legal"></i> Legal
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="/graph/legal/brand.html"><i class="fa fa-search"></i>
+                    Search Brand</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/graph/legal/device.html"><i class="fa fa-search"></i>
+                    Search Device</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/graph/legal/event.html"><i class="fa fa-search"></i>
+                    Search Event</a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown-item">
+              <a href=""><i class="fa fa-sign-out"></i> Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container main-section">
+      <div class="row">
+        <div class="col-lg-6 col-md-12">
+          <div class="graph-container">
+            <div class="graph">
+              <canvas id="myChart"></canvas>
             </div>
           </div>
         </div>
+        <div class="col-lg-6 col-md-12">
+          <div class="box">
+            <form name="search">
+              <input placeholder="Search for Molecules..." type="text" class="input" name="txt"
+                onmouseout="this.value = ''; this.blur();" />
+            </form>
+            <i class="fa fa-search"></i>
+          </div>
+          <div class="description">
+            <h5>Description</h5>
+            <p id="shortDescription"></p>
+            <p id="fullDescription" style="display: none;"></p>
+            <button class="read-more-button" id="readMoreBtn" onclick="toggleDescription()">Read More</button>
+            <button class="read-more-button" id="readLessBtn" style="display: none;" onclick="toggleDescription()">Read
+              Less</button>
+          </div>
+        </div>
       </div>
-      <footer class="footer">
-        <div class="footer-top">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="row">
-                  <div class="col-lg-4 col-md-12">
-                    <a class="navbar-brand" href="#"
-                      ><img class="logo" src="SOMnew.png" alt="Som Biotech"
-                    /></a>
-                  </div>
-                  <div class="col-lg-8 col-md-12">
-                    <address>
-                      <div>
-                        <p class="mb-3">+91 7096044770</p>
-                        <a href="mailto:info@yourmail.com" class="footer-link"
-                          >sombiotechofficial@gmail.com</a
-                        >
-                      </div>
-                    </address>
-                    <div class="social-icons">
-                      <h6 class="footer-title font-weight-bold">
-                        Social Share
-                      </h6>
-                      <div class="d-flex">
-                        <a href="#"><i class="mdi mdi-github-circle"></i></a>
-                        <a href="#"><i class="mdi mdi-facebook-box"></i></a>
-                        <a href="#"><i class="mdi mdi-linkedin"></i></a>
-                      </div>
+    </div>
+    <footer class="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-lg-4 col-md-12">
+                  <a class="navbar-brand" href="#"><img class="logo" src="SOMnew.png" alt="Som Biotech" /></a>
+                </div>
+                <div class="col-lg-8 col-md-12">
+                  <address>
+                    <div>
+                      <p class="mb-3">+91 7096044770</p>
+                      <a href="mailto:info@yourmail.com" class="footer-link">sombiotechofficial@gmail.com</a>
+                    </div>
+                  </address>
+                  <div class="social-icons">
+                    <h6 class="footer-title font-weight-bold">
+                      Social Share
+                    </h6>
+                    <div class="d-flex">
+                      <a href="#"><i class="mdi mdi-github-circle"></i></a>
+                      <a href="#"><i class="mdi mdi-facebook-box"></i></a>
+                      <a href="#"><i class="mdi mdi-linkedin"></i></a>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="row">
-                  <div class="col-lg-6 col-md-12">
-                    <h6 class="footer-title">Links</h6>
-                    <ul class="list-footer">
-                      <li><a href="#" class="footer-link">Home</a></li>
-                      <li><a href="#" class="footer-link">About</a></li>
-                      <li><a href="#" class="footer-link">Services</a></li>
-                      <li><a href="#" class="footer-link">Portfolio</a></li>
-                      <li><a href="#" class="footer-link">Contact</a></li>
-                    </ul>
-                  </div>
-                  <div class="col-lg-6 col-md-12">
-                    <h6 class="footer-title">Product</h6>
-                    <ul class="list-footer">
-                      <li>
-                        <a href="#" class="footer-link">Drug Synthesis Tools</a>
-                      </li>
-                      <li>
-                        <a href="#" class="footer-link"
-                          >Bioproduct Synthesis Tools</a
-                        >
-                      </li>
-                      <li>
-                        <a href="#" class="footer-link">3D Visualization</a>
-                      </li>
-                      <li>
-                        <a href="#" class="footer-link"
-                          >Molecule Structures Visualization</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-lg-6 col-md-12">
+                  <h6 class="footer-title">Links</h6>
+                  <ul class="list-footer">
+                    <li><a href="#" class="footer-link">Home</a></li>
+                    <li><a href="#" class="footer-link">About</a></li>
+                    <li><a href="#" class="footer-link">Services</a></li>
+                    <li><a href="#" class="footer-link">Portfolio</a></li>
+                    <li><a href="#" class="footer-link">Contact</a></li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                  <h6 class="footer-title">Product</h6>
+                  <ul class="list-footer">
+                    <li>
+                      <a href="#" class="footer-link">Drug Synthesis Tools</a>
+                    </li>
+                    <li>
+                      <a href="#" class="footer-link">Bioproduct Synthesis Tools</a>
+                    </li>
+                    <li>
+                      <a href="#" class="footer-link">3D Visualization</a>
+                    </li>
+                    <li>
+                      <a href="#" class="footer-link">Molecule Structures Visualization</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </footer>
-      <script>
-        const shortDescription = "The IoT integration in room temperature monitoring seamlessly merges sensors, data transmission, and web tech. These sensors, like temperature probes, continuously collect room temperatures, relaying real-time data to a central server...";
-        const fullDescription = `IoT integration in a room temperature monitoring system
+      </div>
+    </footer>
+    <script>
+      const shortDescription = "The IoT integration in room temperature monitoring seamlessly merges sensors, data transmission, and web tech. These sensors, like temperature probes, continuously collect room temperatures, relaying real-time data to a central server...";
+      const fullDescription = `IoT integration in a room temperature monitoring system
                 seamlessly combines sensors, data transmission, and web
                 technology. Sensors, such as temperature probes, continuously
                 capture room temperatures, and send real-time data to a central
@@ -470,109 +412,110 @@
                 industrial facilities. Real-time data visualization empowers
                 users with insights for better decision-making and climate
                 control.`;
-      
-        const shortDescriptionElement = document.getElementById("shortDescription");
-        const fullDescriptionElement = document.getElementById("fullDescription");
-        const readMoreBtn = document.getElementById("readMoreBtn");
-        const readLessBtn = document.getElementById("readLessBtn");
-      
-        shortDescriptionElement.textContent = shortDescription;
-        fullDescriptionElement.textContent = fullDescription;
-      
-        function toggleDescription() {
-          if (shortDescriptionElement.style.display === "none") {
-            shortDescriptionElement.style.display = "block";
-            fullDescriptionElement.style.display = "none";
-            readMoreBtn.style.display = "inline-block";
-            readLessBtn.style.display = "none";
-          } else {
-            shortDescriptionElement.style.display = "none";
-            fullDescriptionElement.style.display = "block";
-            readMoreBtn.style.display = "none";
-            readLessBtn.style.display = "inline-block";
-          }
+
+      const shortDescriptionElement = document.getElementById("shortDescription");
+      const fullDescriptionElement = document.getElementById("fullDescription");
+      const readMoreBtn = document.getElementById("readMoreBtn");
+      const readLessBtn = document.getElementById("readLessBtn");
+
+      shortDescriptionElement.textContent = shortDescription;
+      fullDescriptionElement.textContent = fullDescription;
+
+      function toggleDescription() {
+        if (shortDescriptionElement.style.display === "none") {
+          shortDescriptionElement.style.display = "block";
+          fullDescriptionElement.style.display = "none";
+          readMoreBtn.style.display = "inline-block";
+          readLessBtn.style.display = "none";
+        } else {
+          shortDescriptionElement.style.display = "none";
+          fullDescriptionElement.style.display = "block";
+          readMoreBtn.style.display = "none";
+          readLessBtn.style.display = "inline-block";
         }
-      </script>
-      <script>
-        const currentPath = window.location.pathname;
-        $(".dropdown-item a").each(function () {
-          const itemHref = $(this).attr("href");
-          if (itemHref === currentPath) {
-            $(this).closest(".dropdown-item").addClass("active");
-          }
-        });
-      </script>
-      <script>
-        const xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-
-        // Define multiple datasets with different shapes
-        const yValues = [
-          [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15], // Original data
-          [8, 7, 9, 8, 10, 9, 11, 12, 13, 15, 14], // Example: Different shape
-          [9, 7, 10, 8, 11, 9, 12, 13, 12, 16, 13], // Example: Another different shape
-        ];
-
-        const chart = new Chart("myChart", {
-          type: "line",
-          data: {
-            labels: xValues,
-            datasets: [
-              {
-                fill: false,
-                lineTension: 0,
-                backgroundColor: "rgba(0,0,255,1.0)",
-                borderColor: "rgba(0,0,255,0.1)",
-                data: yValues[0], // Start with the original dataset
-              },
-            ],
-          },
-          options: {
-            legend: { display: false },
-            scales: {
-              yAxes: [{ ticks: { min: 6, max: 16 } }],
-            },
-            title: {
-              display: true,
-              text: "Line Graph",
-              fontSize: 20,
-            },
-          },
-        });
-
-        let dataIndex = 0;
-
-        // Function to update the dataset every 5 seconds
-        function changeGraphShape() {
-          dataIndex = (dataIndex + 1) % yValues.length; // Cycle through datasets
-          chart.data.datasets[0].data = yValues[dataIndex];
-          chart.update(); // Update the chart with new data
+      }
+    </script>
+    <script>
+      const currentPath = window.location.pathname;
+      $(".dropdown-item a").each(function () {
+        const itemHref = $(this).attr("href");
+        if (itemHref === currentPath) {
+          $(this).closest(".dropdown-item").addClass("active");
         }
+      });
+    </script>
+    <script>
+      const xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
 
-        // Update the graph every 5 seconds
-        setInterval(changeGraphShape, 5000);
-      </script>
-      <script>
-        window.addEventListener("load", function () {
-          const iframe = document.getElementById("animationFrame");
-          const fullscreenOverlay =
-            document.getElementById("fullscreenOverlay");
+      // Define multiple datasets with different shapes
+      const yValues = [
+        [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15], // Original data
+        [8, 7, 9, 8, 10, 9, 11, 12, 13, 15, 14], // Example: Different shape
+        [9, 7, 10, 8, 11, 9, 12, 13, 12, 16, 13], // Example: Another different shape
+      ];
 
-          iframe.style.display = "none";
+      const chart = new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: xValues,
+          datasets: [
+            {
+              fill: false,
+              lineTension: 0,
+              backgroundColor: "rgba(0,0,255,1.0)",
+              borderColor: "rgba(0,0,255,0.1)",
+              data: yValues[0], // Start with the original dataset
+            },
+          ],
+        },
+        options: {
+          legend: { display: false },
+          scales: {
+            yAxes: [{ ticks: { min: 6, max: 16 } }],
+          },
+          title: {
+            display: true,
+            text: "Line Graph",
+            fontSize: 20,
+          },
+        },
+      });
 
-          if (iframe.contentDocument) {
-            const iframeContent =
-              iframe.contentDocument.documentElement.innerHTML;
+      let dataIndex = 0;
 
-            fullscreenOverlay.innerHTML = iframeContent;
+      // Function to update the dataset every 5 seconds
+      function changeGraphShape() {
+        dataIndex = (dataIndex + 1) % yValues.length; // Cycle through datasets
+        chart.data.datasets[0].data = yValues[dataIndex];
+        chart.update(); // Update the chart with new data
+      }
 
-            setTimeout(function () {
-              fullscreenOverlay.style.display = "none";
-            }, 500);
-          }
-        });
-      </script>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </div>
-  </body>
+      // Update the graph every 5 seconds
+      setInterval(changeGraphShape, 5000);
+    </script>
+    <script>
+      window.addEventListener("load", function () {
+        const iframe = document.getElementById("animationFrame");
+        const fullscreenOverlay =
+          document.getElementById("fullscreenOverlay");
+
+        iframe.style.display = "none";
+
+        if (iframe.contentDocument) {
+          const iframeContent =
+            iframe.contentDocument.documentElement.innerHTML;
+
+          fullscreenOverlay.innerHTML = iframeContent;
+
+          setTimeout(function () {
+            fullscreenOverlay.style.display = "none";
+          }, 500);
+        }
+      });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </div>
+</body>
+
 </html>
