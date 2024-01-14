@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Display PDB Structure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="list.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-z1p/Ag4+C5os0Wqy+GNdRBsPmJ6ZeqoOAnzqPDrZl6gGX7RZEnUzbs1yWMyYdP8kOm/n1qsS00OGqyx7s2ypHdA==" crossorigin="anonymous" />
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-image: linear-gradient(to right, #3498db, #0327da);
+        position: relative;
+      }
+
+      .logo-choose-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .upload-button,
+      .choose-button {
+        display: flex;
+        align-items: center;
+      }
+
+      .filter-button {
+        display: flex;
+        align-items: center;
+        margin-right: 100px !important;
+      }
+
+      .icon-container {
+        position: relative;
+        margin-right: 20px;
+      }
+
+      .navbar-icon,
+      .icon-button {
+        cursor: pointer;
+        color: rgb(15, 14, 14);
+        font-size: 24px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #2ecc71;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+        top: 100%;
+        left: 0;
+        margin-right: 80px;
+        min-width: 140px;
+        overflow: hidden;
+      }
+
+      .dropdown-content a {
+        color: rgb(0, 0, 0);
+        padding: 0px 0px;
+        text-decoration: none;
+        display: block;
+        width: 140px;
+        margin-right: 20px;
+        transition: background-color 0.3s ease;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #27ae60;
+        margin-right: 0;
+      }
+
+      .legend-container {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        padding: 10px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        width: max-content;
+        max-height: 60vh;
+        overflow-y: auto;
+        z-index: 1;
+      }
+
+      .icon-container:hover .dropdown-content,
+      .icon-container:hover .legend-container {
+        display: block;
+      }
+
+      .icon-button {
+        cursor: pointer;
+        padding: 10px;
+        background-color: #2ecc71;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-style: italic;
+        transition: background-color 0.3s ease;
+      }
+
+      .icon-button:hover {
+        background-color: #27ae60;
+      }
+
+      .upload-button button,
+      .choose-button button {
+        cursor: pointer;
+        padding: 10px;
+        color: rgb(0, 0, 0);
+        border: none;
+        margin-right: 50px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      .filter-button button {
+        cursor: pointer;
+        padding: 10px;
+        color: rgb(0, 0, 0);
+        border: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-right: 20px;
+      }
+
+      .upload-button button:hover,
+      .choose-button button:hover,
+      .filter-button button:hover {
+        background-color: #27ae60;
+      }
+
+      .choose-button span {
+        margin-right: 20px;
+      }
+
+      .smiles-input {
+        position: absolute;
+        top: 25px;
+        left: 60%;
+        right: 22%;
+        display: inline-block;
+        padding: 8px;
+        border: 1px solid #0327da;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        background-color: #ffffff;
+        color: rgb(0, 0, 0);
+      }
+
+      .smiles-input:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      .submit-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      button.ef {
+        background-color: #2ecc71;
+        color: #ffffff;
+      }
+
+      .logo {
+        width: 100px;
+        margin-left: 30px;
+      }
+
+      .submit-button {
+        display: none;
+        cursor: pointer;
+        padding: 9px;
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        position: absolute;
+        top: 20px;
+        right: 10%;
+        margin-top: 5px;
+      }
+
+      .select-container {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    /* Basic styling for the select elements */
+    select {
+    font-size: 12px !important;
+    padding: 5px;
+    border: 2px solid #3498db;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #ecf0f1;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s;
+}
+    /* Hover effect */
+    select:hover {
+        border-color: #2980b9;
+    }
+
+    /* Focus effect */
+    select:focus {
+        border-color: #2980b9;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+    /* Styling for the option elements */
+    option {
+        background-color: #ecf0f1;
+        color: #333;
+    }
+
+      #viewport {
+        width: 100%;
+        height: calc(100vh - 100px);
+      }
+
+      .img {
+        height: 50px;
+        width: 110px;
+        margin-right: 20px;
+      }
+
+      .dropdown-content button {
+        padding: 8px;
+        margin: 0;
+        width: 140px;
+      }
+
+      .filter-button button {
+        background-color: #FFF;
+      }
+
+      .range-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    input[type="range"] {
+        height: 5px;
+        border-radius: 5px;
+        background: #ecf0f1;
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        margin-bottom: 10px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #3498db;
+        cursor: pointer;
+    }
+
+    .range-label {
+      margin-top: 5px;
+        color: #333;
+    }
+
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding-bottom: 40px;
+        }
+
+        .logo {
+          margin-left: 0;
+        }
+
+        .filter-button {
+          margin-right: 0 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="logo-choose-container">
+        <img class="logo" src="../SOMnew.png" class="img" />
+      </div>
+      <div class="choose-button">
+        <div class="upload-button">
+          <div class="icon-container">
+            <span
+            class="icon-button"
+            onmouseover="showLegend()"
+            onmouseout="hideLegend()">
+            <img src="./upload.png" width="20" height="20" style="position: relative; top: 4px;"/>
+        </span>
+          <div class="dropdown-content" id="filterDropdown">
+            <button style="font-size: 12px" onclick="loadStructureButtonClick()">
+              Upload PDB file
+            </button>
+            <button style="font-size: 12px" onclick="loadStructureButtonClick()">
+              Choose PDB file
+            </button>
+          </div>
+        </div>
+      </div>
+        <div class="icon-container">
+          <span
+              class="icon-button"
+              onmouseover="showLegend()"
+              onmouseout="hideLegend()"
+              ><img src="./info.png" width="20" height="20" style="position: relative; top: 4px;"
+            /></span>
+          <div class="legend-container">
+            <span style="color: black; font-weight: bolder"> Legend:</span>
+            <br />
+            <span style="color: #db1f1f; font-size: large; font-weight: bold"
+              >Red:</span
+            >
+            Oxygen
+            <br />
+            <span style="color: #0000ff; font-size: large; font-weight: bold"
+              >Blue:</span
+            >
+            Nitrogen
+            <br />
+            <span
+              style="
+                color: rgb(66, 63, 63);
+                font-size: large;
+                font-weight: bold;
+              "
+              >Grey:</span
+            >
+            Carbon
+            <br />
+            <span
+              style="
+                color: rgb(148, 142, 142);
+                font-size: large;
+                font-weight: bold;
+              "
+              >White:</span
+            >
+            Hydrogen
+          </div>
+        </div>
+        <div class="filter-button">
+          <div class="icon-container">
+            <span
+              class="icon-button"
+              onmouseover="showLegend()"
+              onmouseout="hideLegend()"
+              ><img src="./filter.png" width="20" height="20" style="position: relative; top: 4px;"
+            /></span>
+            <div class="dropdown-content" id="filterDropdown">
+              <select id="ligandSelect" style="width: 140px;" onchange="handleLigandChange()">
+                <option value="" disabled selected>Select Ligand</option>
+              </select>
+            <select id="chainSelect" style="width: 140px;"  onchange="handleChainChange()">
+              <option value="" disabled selected>Select Chain</option>
+            </select>
+            <select id="residueSelect" style="width: 140px;" onchange="handleResidueChange()">
+              <option value="" disabled selected>Select Residue</option>
+            </select>
+              <button style="font-size: 12px" onclick="showFullButtonClick()">
+                Show Full Structure
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleCartoonButtonClick()"
+              >
+                Cartoon
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleBackboneButtonClick()"
+              >
+                Backbone
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleHydrogenVisibilityButtonClick()"
+              >
+                Hydrogen Visibility
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleSidechainAttachedButtonClick()"
+              >
+                Sidechain Attached
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleLabelRepresentationButtonClick()"
+              >
+                Label Representation
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleHydrophobicContactsButtonClick()"
+              >
+                Hydrophobic
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleHydrogenBondContactsButtonClick()"
+              >
+                Hydrogen Bond
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleWeakHydrogenBondButtonClick()"
+              >
+                Weak HB
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleWaterHydrogenBondButtonClick()"
+              >
+                Water-Water HB
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleHydrogenBondButtonClick()"
+              >
+                Backbone-Backbone HB
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleHalogenBondButtonClick()"
+              >
+                Halogen Bond
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleMetalInteractionButtonClick()"
+              >
+                Metal Interaction
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleSaltBridgeButtonClick()"
+              >
+                Salt Bridge
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="toggleCationPiButtonClick()"
+              >
+                Cation-Pi
+              </button>
+              <button
+                style="font-size: 12px"
+                onclick="togglePiStackingButtonClick()"
+              >
+                Pi-Stacking
+              </button>
+              <span style="font-size: 12px; display: flex; justify-content: center;" class="range-label">Pocket Near Clipping</span>
+              <input
+                type="range"
+                value="0"
+                min="0"
+                max="10000"
+                step="1"
+                oninput="updatePocketNearClipping(this.value)"
+              />
+              <span style="font-size: 12px; display: flex; justify-content: center; text-align: center;" class="range-label">Pocket Radius Clipping</span>
+              <input
+                type="range"
+                value="100"
+                min="1"
+                max="100"
+                step="1"
+                oninput="updatePocketRadiusClipping(this.value)"
+              />
+              <span style="font-size: 12px; display: flex; justify-content: center;" class="range-label">Pocket Opacity</span>
+              <input
+                type="range"
+                value="90"
+                min="0"
+                max="100"
+                step="1"
+                oninput="updatePocketOpacity(this.value)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="viewport"></div>
+    <script src="https://cdn.rawgit.com/arose/ngl/v2.0.0-dev.32/dist/ngl.js"></script>
+    <script>
+      NGL.DatasourceRegistry.add(
+        "data",
+        new NGL.StaticDatasource(
+          "//cdn.rawgit.com/arose/ngl/v2.0.0-dev.32/data/"
+        )
+      );
+      var stage = new NGL.Stage("viewport");
+      window.addEventListener(
+        "resize",
+        function (event) {
+          stage.handleResize();
+        },
+        false
+      );
+
+      stage.setParameters({
+        backgroundColor: "white",
+      });
+
+      function loadStructureButtonClick() {
+        loadStructureButton.click();
+      }
+
+      function showFullButtonClick() {
+        showFull();
+      }
+
+      function toggleActiveState(button) {
+        button.classList.toggle("active");
+      }
+
+      function showLigandButtonClick() {
+        var selectedLigand = ligandSelect.value;
+
+        if (selectedLigand) {
+          showLigand(selectedLigand);
+        } else {
+          showFull();
+        }
+      }
+
+      function toggleCartoonButtonClick() {
+        cartoonCheckbox.checked = !cartoonCheckbox.checked;
+        cartoonRepr.setVisibility(cartoonCheckbox.checked);
+        toggleActiveState(this);
+      }
+
+      function toggleBackboneButtonClick() {
+        backboneCheckbox.checked = !backboneCheckbox.checked;
+        backboneRepr.setVisibility(backboneCheckbox.checked);
+        toggleActiveState(this);
+      }
+
+      function toggleHydrogenVisibilityButtonClick() {
+        hydrogenCheckbox.checked = !hydrogenCheckbox.checked;
+        if (hydrogenCheckbox.checked) {
+          struc.setSelection("*");
+        } else {
+          struc.setSelection("not _H");
+        }
+      }
+
+      function toggleSidechainAttachedButtonClick() {
+        sidechainAttachedCheckbox.checked = !sidechainAttachedCheckbox.checked;
+        sidechainAttached = sidechainAttachedCheckbox.checked;
+        neighborRepr.setSelection(
+          sidechainAttached
+            ? "(" + neighborSele + ") and (sidechainAttached or not polymer)"
+            : neighborSele
+        );
+      }
+
+      function toggleLabelRepresentationButtonClick() {
+        labelCheckbox.checked = !labelCheckbox.checked;
+        labelRepr.setVisibility(labelCheckbox.checked);
+      }
+
+      function toggleHydrophobicContactsButtonClick() {
+        hydrophobicCheckbox.checked = !hydrophobicCheckbox.checked;
+        contactRepr.setParameters({ hydrophobic: hydrophobicCheckbox.checked });
+      }
+
+      function toggleHydrogenBondContactsButtonClick() {
+        hydrogenBondCheckbox.checked = !hydrogenBondCheckbox.checked;
+        contactRepr.setParameters({
+          hydrogenBond: hydrogenBondCheckbox.checked,
+        });
+      }
+
+      function toggleWeakHydrogenBondButtonClick() {
+        weakHydrogenBondCheckbox.checked = !weakHydrogenBondCheckbox.checked;
+        contactRepr.setParameters({
+          weakHydrogenBond: weakHydrogenBondCheckbox.checked,
+        });
+      }
+
+      function toggleWaterHydrogenBondButtonClick() {
+        waterHydrogenBondCheckbox.checked = !waterHydrogenBondCheckbox.checked;
+        contactRepr.setParameters({
+          waterHydrogenBond: waterHydrogenBondCheckbox.checked,
+        });
+      }
+
+      function toggleHydrogenBondButtonClick() {
+        backboneHydrogenBondCheckbox.checked =
+          !backboneHydrogenBondCheckbox.checked;
+        contactRepr.setParameters({
+          backboneHydrogenBond: backboneHydrogenBondCheckbox.checked,
+        });
+      }
+
+      function toggleHalogenBondButtonClick() {
+        halogenBondCheckbox.checked = !halogenBondCheckbox.checked;
+        contactRepr.setParameters({ halogenBond: halogenBondCheckbox.checked });
+      }
+
+      function toggleMetalInteractionButtonClick() {
+        metalInteractionCheckbox.checked = !metalInteractionCheckbox.checked;
+        contactRepr.setParameters({
+          metalComplex: metalInteractionCheckbox.checked,
+        });
+      }
+
+      function toggleSaltBridgeButtonClick() {
+        saltBridgeCheckbox.checked = !saltBridgeCheckbox.checked;
+        contactRepr.setParameters({ saltBridge: saltBridgeCheckbox.checked });
+      }
+
+      function toggleCationPiButtonClick() {
+        cationPiCheckbox.checked = !cationPiCheckbox.checked;
+        contactRepr.setParameters({ cationPi: cationPiCheckbox.checked });
+      }
+
+      function togglePiStackingButtonClick() {
+        piStackingCheckbox.checked = !piStackingCheckbox.checked;
+        contactRepr.setParameters({ piStacking: piStackingCheckbox.checked });
+      }
+
+      function toggleActiveState(buttonId) {
+        var button = document.getElementById(buttonId);
+        button.classList.toggle("active");
+      }
+      function updatePocketNearClipping(value) {
+        var sceneRadius = stage.viewer.boundingBox.getSize().length() / 2;
+        var f = pocketRadius / sceneRadius;
+        var v = parseFloat(value) / 10000;
+        var c = 0.5 - f / 2 + v * f;
+        pocketRepr.setParameters({ clipNear: c * 100 });
+      }
+
+      function updatePocketRadiusClipping(value) {
+        pocketRadiusClipFactor = parseFloat(value) / 100;
+        pocketRepr.setParameters({
+          clipRadius: pocketRadius * pocketRadiusClipFactor,
+        });
+      }
+
+      function updatePocketOpacity(value) {
+        pocketRepr.setParameters({ opacity: parseFloat(value) / 100 });
+      }
+
+      function addElement(el) {
+        Object.assign(el.style, {
+          position: "absolute",
+          zIndex: 10,
+        });
+        stage.viewer.container.appendChild(el);
+      }
+
+      function createElement(name, properties, style) {
+        var el = document.createElement(name);
+        Object.assign(el, properties);
+        Object.assign(el.style, style);
+        return el;
+      }
+
+      function createSelect(options, properties, style) {
+        var select = createElement("select", properties, style);
+        options.forEach(function (d) {
+          select.add(
+            createElement("option", {
+              value: d[0],
+              text: d[1],
+            })
+          );
+        });
+        return select;
+      }
+
+      function createFileButton(label, properties, style) {
+        var input = createElement(
+          "input",
+          Object.assign(
+            {
+              type: "file",
+            },
+            properties
+          ),
+          { display: "none" }
+        );
+        addElement(input);
+        var button = createElement(
+          "input",
+          {
+            value: label,
+            type: "button",
+            onclick: function () {
+              input.click();
+            },
+          },
+          style
+        );
+        return button;
+      }
+
+      var topPosition = -200;
+
+      function getTopPosition(increment) {
+        if (increment) topPosition += increment;
+        return topPosition + "px";
+      }
+
+      var tooltip = document.createElement("div");
+      Object.assign(tooltip.style, {
+        display: "none",
+        position: "fixed",
+        zIndex: 10,
+        pointerEvents: "none",
+        backgroundColor: "rgba( 0, 0, 0, 0.6 )",
+        color: "lightgrey",
+        padding: "8px",
+        fontFamily: "sans-serif",
+      });
+      document.body.appendChild(tooltip);
+
+      stage.mouseControls.remove("hoverPick");
+
+      stage.signals.hovered.add(function (pickingProxy) {
+        if (pickingProxy) {
+          if (pickingProxy.atom || pickingProxy.bond) {
+            var atom = pickingProxy.atom || pickingProxy.closestBondAtom;
+            var vm = atom.structure.data["@valenceModel"];
+            if (vm && vm.idealValence) {
+              tooltip.innerHTML = `${pickingProxy.getLabel()}<br/>
+        <hr/>
+        Atom: ${atom.qualifiedName()}<br/>
+        ideal valence: ${vm.idealValence[atom.index]}<br/>
+        ideal geometry: ${vm.idealGeometry[atom.index]}<br/>
+        implicit charge: ${vm.implicitCharge[atom.index]}<br/>
+        formal charge: ${
+          atom.formalCharge === null ? "?" : atom.formalCharge
+        }<br/>
+        aromatic: ${atom.aromatic ? "true" : "false"}<br/>
+        `;
+            } else if (vm && vm.charge) {
+              tooltip.innerHTML = `${pickingProxy.getLabel()}<br/>
+        <hr/>
+        Atom: ${atom.qualifiedName()}<br/>
+        vm charge: ${vm.charge[atom.index]}<br/>
+        vm implicitH: ${vm.implicitH[atom.index]}<br/>
+        vm totalH: ${vm.totalH[atom.index]}<br/>
+        vm geom: ${vm.idealGeometry[atom.index]}</br>
+        formal charge: ${
+          atom.formalCharge === null ? "?" : atom.formalCharge
+        }<br/>
+        aromatic: ${atom.aromatic ? "true" : "false"}<br/>
+        `;
+            } else {
+              tooltip.innerHTML = `${pickingProxy.getLabel()}`;
+            }
+          } else {
+            tooltip.innerHTML = `${pickingProxy.getLabel()}`;
+          }
+          var mp = pickingProxy.mouse.position;
+          tooltip.style.bottom = window.innerHeight - mp.y + 3 + "px";
+          tooltip.style.left = mp.x + 3 + "px";
+          tooltip.style.display = "block";
+        } else {
+          tooltip.style.display = "none";
+        }
+      });
+
+      stage.signals.clicked.add(function (pickingProxy) {
+        if (pickingProxy && (pickingProxy.atom || pickingProxy.bond)) {
+          console.log(pickingProxy.atom || pickingProxy.closestBondAtom);
+        }
+      });
+
+      var ligandSele =
+        "( not polymer or not ( protein or nucleic ) ) and not ( water or ACE or NH2 )";
+
+      var pocketRadius = 0;
+      var pocketRadiusClipFactor = 1;
+
+      var cartoonRepr,
+        backboneRepr,
+        spacefillRepr,
+        neighborRepr,
+        ligandRepr,
+        contactRepr,
+        pocketRepr,
+        labelRepr;
+
+      var struc;
+      var neighborSele;
+      var sidechainAttached = false;
+
+      function loadStructure(input) {
+        struc = undefined;
+        stage.setFocus(0);
+        stage.removeAllComponents();
+        ligandSelect.innerHTML = "";
+        clipNearRange.value = 0;
+        clipRadiusRange.value = 100;
+        pocketOpacityRange.value = 0;
+        cartoonCheckbox.checked = false;
+        backboneCheckbox.checked = false;
+        hydrogenCheckbox.checked = true;
+        hydrophobicCheckbox.checked = false;
+        hydrogenBondCheckbox.checked = true;
+        weakHydrogenBondCheckbox.checked = false;
+        waterHydrogenBondCheckbox.checked = true;
+        backboneHydrogenBondCheckbox.checked = true;
+        halogenBondCheckbox.checked = true;
+        metalInteractionCheckbox.checked = true;
+        saltBridgeCheckbox.checked = true;
+        cationPiCheckbox.checked = true;
+        piStackingCheckbox.checked = true;
+        return stage.loadFile(input).then(function (o) {
+          struc = o;
+          setLigandOptions();
+          setChainOptions();
+          setResidueOptions();
+          o.autoView();
+          cartoonRepr = o.addRepresentation("cartoon", {
+            visible: false,
+          });
+          backboneRepr = o.addRepresentation("backbone", {
+            visible: true,
+            colorValue: "lightgrey",
+            radiusScale: 2,
+          });
+          spacefillRepr = o.addRepresentation("spacefill", {
+            sele: ligandSele,
+            visible: true,
+          });
+          neighborRepr = o.addRepresentation("ball+stick", {
+            sele: "none",
+            aspectRatio: 1.1,
+            colorValue: "lightgrey",
+            multipleBond: "symmetric",
+          });
+          ligandRepr = o.addRepresentation("ball+stick", {
+            multipleBond: "symmetric",
+            colorValue: "grey",
+            sele: "none",
+            aspectRatio: 1.2,
+            radiusScale: 2.5,
+          });
+          contactRepr = o.addRepresentation("contact", {
+            sele: "none",
+            radiusSize: 0.07,
+            weakHydrogenBond: false,
+            waterHydrogenBond: false,
+            backboneHydrogenBond: true,
+          });
+          pocketRepr = o.addRepresentation("surface", {
+            sele: "none",
+            lazy: true,
+            visibility: true,
+            clipNear: 0,
+            opaqueBack: false,
+            opacity: 0.0,
+            color: "hydrophobicity",
+            roughness: 1.0,
+            surfaceType: "av",
+          });
+          labelRepr = o.addRepresentation("label", {
+            sele: "none",
+            color: "#333333",
+            yOffset: 0.2,
+            zOffset: 2.0,
+            attachment: "bottom-center",
+            showBorder: true,
+            borderColor: "lightgrey",
+            borderWidth: 0.25,
+            disablePicking: true,
+            radiusType: "size",
+            radiusSize: 0.8,
+            labelType: "residue",
+            labelGrouping: "residue",
+          });
+        });
+      }
+
+      function setLigandOptions() {
+        var ligandSelect = document.getElementById("ligandSelect");
+        ligandSelect.innerHTML = "";
+        var options = [["", "Select Ligand"]];
+        struc.structure.eachResidue(function (rp) {
+          if (rp.isWater()) return;
+          var sele = "";
+          if (rp.resno !== undefined) sele += rp.resno;
+          if (rp.inscode) sele += "^" + rp.inscode;
+          if (rp.chain) sele += ":" + rp.chainname;
+          var name = (rp.resname ? "[" + rp.resname + "]" : "") + sele;
+          if (rp.entity.description) name += " (" + rp.entity.description + ")";
+          options.push([sele, name]);
+        }, new NGL.Selection(ligandSele));
+        options.forEach(function (d) {
+          ligandSelect.add(
+            createElement("option", {
+              value: d[0],
+              text: d[1],
+            })
+          );
+        });
+      }
+
+      function setChainOptions() {
+        var chainSelect = document.getElementById("chainSelect");
+        chainSelect.innerHTML = "";
+        var options = [["", "Select Chain"]];
+        struc.structure.eachChain(function (cp) {
+          var name = cp.chainname;
+          if (cp.entity.description) name += " (" + cp.entity.description + ")";
+          options.push([cp.chainname, name]);
+        }, new NGL.Selection("polymer"));
+        options.forEach(function (d) {
+          chainSelect.add(
+            createElement("option", {
+              value: d[0],
+              text: d[1],
+            })
+          );
+        });
+      }
+
+      function setResidueOptions(chain) {
+        var residueSelect = document.getElementById("residueSelect");
+        residueSelect.innerHTML = "";
+        var options = [["", "Select Residue"]];
+        if (chain) {
+          struc.structure.eachResidue(function (rp) {
+            var sele = "";
+            if (rp.resno !== undefined) sele += rp.resno;
+            if (rp.inscode) sele += "^" + rp.inscode;
+            if (rp.chain) sele += ":" + rp.chainname;
+            var name = (rp.resname ? "[" + rp.resname + "]" : "") + sele;
+            options.push([sele, name]);
+          }, new NGL.Selection("polymer and :" + chain));
+        }
+        options.forEach(function (d) {
+          residueSelect.add(
+            createElement("option", {
+              value: d[0],
+              text: d[1],
+            })
+          );
+        });
+      }
+
+
+      function handleLigandChange() {
+    var ligandSelect = document.getElementById("ligandSelect");
+    var selectedValue = ligandSelect.value;
+    if (!selectedValue) {
+        showFull();
+    } else {
+        showLigand(selectedValue);
+    }
+}
+
+function handleChainChange() {
+    var chainSelect = document.getElementById("chainSelect");
+    var residueSelect = document.getElementById("residueSelect");
+    ligandSelect.value = "";
+    residueSelect.value = "";
+    setResidueOptions(chainSelect.value);
+}
+
+function handleResidueChange() {
+    var residueSelect = document.getElementById("residueSelect");
+    var selectedValue = residueSelect.value;
+    if (!selectedValue) {
+        showFull();
+    } else {
+        showLigand(selectedValue);
+    }
+}
+
+      var loadStructureButton = createFileButton(
+        "load structure",
+        {
+          accept: ".pdb,.cif,.ent,.gz,.mol2",
+          onchange: function (e) {
+            if (e.target.files[0]) {
+              loadStructure(e.target.files[0]);
+            }
+          },
+        },
+        { top: getTopPosition(), left: "12px" }
+      );
+      loadStructureButton.style.display = "none";
+
+      addElement(loadStructureButton);
+
+      var loadPdbidText = createElement(
+        "span",
+        {
+          innerText: "load pdb id",
+        },
+        { top: getTopPosition(20), left: "12px", color: "grey" }
+      );
+      addElement(loadPdbidText);
+
+      loadPdbidText.style.display = "none";
+
+      var loadPdbidInput = createElement(
+        "input",
+        {
+          type: "text",
+          title: "press enter to load pdbid",
+          onkeypress: function (e) {
+            if (e.keyCode === 13) {
+              e.preventDefault();
+              loadStructure("rcsb://" + e.target.value);
+            }
+          },
+        },
+        { top: getTopPosition(20), left: "12px", width: "120px" }
+      );
+      addElement(loadPdbidInput);
+
+      loadPdbidInput.style.display = "none";
+
+      function showFull() {
+        ligandSelect.value = "";
+
+        backboneRepr.setParameters({ radiusScale: 2 });
+        backboneRepr.setVisibility(true);
+        spacefillRepr.setVisibility(true);
+
+        ligandRepr.setVisibility(false);
+        neighborRepr.setVisibility(false);
+        contactRepr.setVisibility(false);
+        pocketRepr.setVisibility(false);
+        labelRepr.setVisibility(false);
+
+        struc.autoView(2000);
+      }
+
+      var fullButton = createElement(
+        "input",
+        {
+          value: "full structure",
+          type: "button",
+          onclick: showFull,
+        },
+        { top: getTopPosition(30), left: "12px" }
+      );
+      addElement(fullButton);
+
+      fullButton.style.display = "none";
+
+      function showLigand(sele) {
+        var s = struc.structure;
+
+        var withinSele = s.getAtomSetWithinSelection(
+          new NGL.Selection(sele),
+          5
+        );
+        var withinGroup = s.getAtomSetWithinGroup(withinSele);
+        var expandedSele = withinGroup.toSeleString();
+        neighborSele = expandedSele;
+
+        var sview = s.getView(new NGL.Selection(sele));
+        pocketRadius =
+          Math.max(sview.boundingBox.getSize().length() / 2, 2) + 5;
+        var withinSele2 = s.getAtomSetWithinSelection(
+          new NGL.Selection(sele),
+          pocketRadius + 2
+        );
+        var neighborSele2 =
+          "(" +
+          withinSele2.toSeleString() +
+          ") and not (" +
+          sele +
+          ") and polymer";
+
+        backboneRepr.setParameters({ radiusScale: 0.2 });
+        backboneRepr.setVisibility(backboneCheckbox.checked);
+        spacefillRepr.setVisibility(false);
+
+        ligandRepr.setVisibility(true);
+        neighborRepr.setVisibility(true);
+        contactRepr.setVisibility(true);
+        pocketRepr.setVisibility(true);
+        labelRepr.setVisibility(labelCheckbox.checked);
+
+        ligandRepr.setSelection(sele);
+        neighborRepr.setSelection(
+          sidechainAttached
+            ? "(" + neighborSele + ") and (sidechainAttached or not polymer)"
+            : neighborSele
+        );
+        contactRepr.setSelection(expandedSele);
+        pocketRepr.setSelection(neighborSele2);
+        pocketRepr.setParameters({
+          clipRadius: pocketRadius * pocketRadiusClipFactor,
+          clipCenter: sview.center,
+        });
+        labelRepr.setSelection("(" + neighborSele + ") and not (water or ion)");
+
+        struc.autoView(expandedSele, 2000);
+      }
+
+      var ligandSelect = createSelect(
+        [],
+        {
+          onchange: function (e) {
+            residueSelect.value = "";
+            var sele = e.target.value;
+            if (!sele) {
+              showFull();
+            } else {
+              showLigand(sele);
+            }
+          },
+        },
+        { top: getTopPosition(30), left: "12px", width: "130px" }
+      );
+      addElement(ligandSelect);
+
+      var chainSelect = createSelect(
+        [],
+        {
+          onchange: function (e) {
+            ligandSelect.value = "";
+            residueSelect.value = "";
+            setResidueOptions(e.target.value);
+          },
+        },
+        { top: getTopPosition(20), left: "12px", width: "130px" }
+      );
+      addElement(chainSelect);
+
+      var residueSelect = createSelect(
+        [],
+        {
+          onchange: function (e) {
+            ligandSelect.value = "";
+            var sele = e.target.value;
+            if (!sele) {
+              showFull();
+            } else {
+              showLigand(sele);
+            }
+          },
+        },
+        { top: getTopPosition(20), left: "12px", width: "130px" }
+      );
+      addElement(residueSelect);
+
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(30), left: "12px", color: "grey" }
+        )
+      );
+      var clipNearRange = createElement(
+        "input",
+        {
+          type: "range",
+          value: 0,
+          min: 0,
+          max: 10000,
+          step: 1,
+        },
+        { top: getTopPosition(16), left: "12px" }
+      );
+      clipNearRange.oninput = function (e) {
+        var sceneRadius = stage.viewer.boundingBox.getSize().length() / 2;
+
+        var f = pocketRadius / sceneRadius;
+        var v = parseFloat(e.target.value) / 10000; // must be between 0 and 1
+        var c = 0.5 - f / 2 + v * f;
+
+        pocketRepr.setParameters({
+          clipNear: c * 100,
+        });
+      };
+      addElement(clipNearRange);
+
+      clipNearRange.style.display = "none";
+
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(20), left: "12px", color: "grey" }
+        )
+      );
+      var clipRadiusRange = createElement(
+        "input",
+        {
+          type: "range",
+          value: 100,
+          min: 1,
+          max: 100,
+          step: 1,
+        },
+        { top: getTopPosition(16), left: "12px" }
+      );
+      clipRadiusRange.oninput = function (e) {
+        pocketRadiusClipFactor = parseFloat(e.target.value) / 100;
+        pocketRepr.setParameters({
+          clipRadius: pocketRadius * pocketRadiusClipFactor,
+        });
+      };
+      addElement(clipRadiusRange);
+
+      clipRadiusRange.style.display = "none";
+
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(20), left: "12px", color: "grey" }
+        )
+      );
+      var pocketOpacityRange = createElement(
+        "input",
+        {
+          type: "range",
+          value: 90,
+          min: 0,
+          max: 100,
+          step: 1,
+        },
+        { top: getTopPosition(16), left: "12px" }
+      );
+      pocketOpacityRange.oninput = function (e) {
+        pocketRepr.setParameters({
+          opacity: parseFloat(e.target.value) / 100,
+        });
+      };
+      addElement(pocketOpacityRange);
+
+      pocketOpacityRange.style.display = "none";
+
+      var cartoonCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            cartoonRepr.setVisibility(e.target.checked);
+          },
+        },
+        { top: getTopPosition(30), left: "12px" }
+      );
+      addElement(cartoonCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var backboneCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            backboneRepr.setVisibility(e.target.checked);
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(backboneCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var hydrogenCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            if (e.target.checked) {
+              struc.setSelection("*");
+            } else {
+              struc.setSelection("not _H");
+            }
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(hydrogenCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var sidechainAttachedCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            sidechainAttached = e.target.checked;
+            neighborRepr.setSelection(
+              sidechainAttached
+                ? "(" +
+                    neighborSele +
+                    ") and (sidechainAttached or not polymer)"
+                : neighborSele
+            );
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(sidechainAttachedCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var labelCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            labelRepr.setVisibility(e.target.checked);
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(labelCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var hydrophobicCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            contactRepr.setParameters({ hydrophobic: e.target.checked });
+          },
+        },
+        { top: getTopPosition(30), left: "12px" }
+      );
+      addElement(hydrophobicCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var hydrogenBondCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            contactRepr.setParameters({ hydrogenBond: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(hydrogenBondCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var weakHydrogenBondCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            contactRepr.setParameters({ weakHydrogenBond: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(weakHydrogenBondCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var waterHydrogenBondCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            contactRepr.setParameters({ waterHydrogenBond: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(waterHydrogenBondCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var backboneHydrogenBondCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: false,
+          onchange: function (e) {
+            contactRepr.setParameters({
+              backboneHydrogenBond: e.target.checked,
+            });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(backboneHydrogenBondCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var halogenBondCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            contactRepr.setParameters({ halogenBond: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(halogenBondCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var metalInteractionCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            contactRepr.setParameters({ metalComplex: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(metalInteractionCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var saltBridgeCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            contactRepr.setParameters({ saltBridge: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(saltBridgeCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var cationPiCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            contactRepr.setParameters({ cationPi: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(cationPiCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+
+      var piStackingCheckbox = createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: true,
+          onchange: function (e) {
+            contactRepr.setParameters({ piStacking: e.target.checked });
+          },
+        },
+        { top: getTopPosition(20), left: "12px" }
+      );
+      addElement(piStackingCheckbox);
+      addElement(
+        createElement(
+          "span",
+          {
+            innerText: "",
+          },
+          { top: getTopPosition(), left: "32px", color: "grey" }
+        )
+      );
+    </script>
+  </body>
+</html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <title>Display PDB Structure</title>
@@ -70,9 +69,7 @@
             border-radius: 5px;
             top: 100%;
             margin-right: 0px;
-            /* Adjusted position */
             left: 0;
-            /* Adjusted position */
         }
 
         .dropdown-content a {
@@ -223,10 +220,6 @@
 
 <body>
     <div class="navbar">
-        <!-- <div class="upload-button">
-            <input type="file" id="fileInput" accept=".pdb" style="display: none;" />
-            <button onclick="handleUpload()">Upload PDB File</button>
-        </div> -->
         <div class="logo-choose-container">
             <img src="/SOMnew.png" class="img">
         </div>
@@ -234,13 +227,11 @@
             <div class="icon-container">
                 <span class="icon-button" onmouseover="showLegend()" onmouseout="hideLegend()">i</span>
                 <div class="dropdown-content" id="uploadChooseDropdown">
-                    <!-- <a href="#" onclick="handleUpload()">Upload PDB File</a> -->
                     <input type="file" id="fileInput" accept=".pdb" style="display: none;" />
                     <button onclick="handleUpload()">Upload PDB File</button>
-                    <!-- <a href="#" onclick="toggleDropdown()">Choose PDB File</a> -->
                     <button onclick="toggleDropdown()">Choose PDB File</button>
-
-
+                    <div class="dropdown-content" id="pdbDropdown">
+                      </div>
                 </div>
                 <div class="legend-container">
                     <span style="color:black;font-weight: bolder;"> Legend:</span>
@@ -254,24 +245,16 @@
                     <span style="color: rgb(148, 142, 142);font-size: large;font-weight: bold;">White:</span> Hydrogen
                 </div>
             </div>
-
             <button class="ef" onclick="toggleDropdown()">≡</button>
-
-
         </div>
     </div>
-
     <div id="viewport"></div>
-
     <div class="submit-container">
         <input type="text" id="smilesInput" class="smiles-input" placeholder="Enter SMILES"
             oninput="toggleSubmitButton()" />
         <button class="submit-button" onclick="submitSmiles()">Submit</button>
     </div>
-
-    <!-- Include NGL library -->
     <script src="https://cdn.rawgit.com/arose/ngl/v2.0.0-dev.32/dist/ngl.js"></script>
-
     <script>
         var uploadedFiles = [];
         var stage = new NGL.Stage("viewport");
@@ -353,13 +336,9 @@
                 uploadChooseDropdown.style.display = 'none';
             }
         }
-
-
-
         function showLegend() {
             legendContainer.style.display = 'block';
         }
-
         function hideLegend() {
             legendContainer.style.display = 'none';
         }
@@ -368,7 +347,6 @@
             var submitButton = document.querySelector('.submit-button');
             submitButton.style.display = smilesInputValue ? 'inline-block' : 'none';
         }
-
         function submitSmiles() {
             var smilesInputValue = document.getElementById('smilesInput').value.trim();
             if (smilesInputValue) {
@@ -378,5 +356,4 @@
         }
     </script>
 </body>
-
 </html>
